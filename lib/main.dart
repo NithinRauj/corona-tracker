@@ -1,14 +1,19 @@
 import 'package:corona_tracker_app/screens/chart_view.dart';
 import 'package:corona_tracker_app/screens/country_stats.dart';
+import 'package:corona_tracker_app/services/data_service.dart';
 import 'package:flutter/material.dart';
 import 'package:corona_tracker_app/screens/world_stats.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final service = DataService();
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
       title: 'Flutter Demo',
       home: DefaultTabController(
@@ -16,25 +21,52 @@ class MyApp extends StatelessWidget {
         child: Scaffold(
             backgroundColor: Color(0xff1E272E),
             appBar: AppBar(
-              title: Text('Corona Tracker'),
+              title: Text(
+                'Corona Tracker',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
               backgroundColor: Color(0xff1b262c),
               bottom: TabBar(tabs: [
                 Tab(
-                  child: Text('World Stats'),
+                  child: Text(
+                    'World Stats',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
                 ),
                 Tab(
-                  child: Text('Chart View'),
+                  child: Text(
+                    'Chart View',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
                 ),
                 Tab(
-                  child: Text('Country Stats'),
+                  child: Text(
+                    'Country Stats',
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
                 )
               ]),
             ),
-            body: TabBarView(children: [
-              WorldStats(),
-              ChartView(),
-              CountryStats(),
-            ])),
+            body: FutureProvider(
+              create: (context) => service.getTotalStatsData(),
+              child: TabBarView(children: [
+                WorldStats(),
+                ChartView(),
+                CountryStats(),
+              ]),
+            )),
       ),
     );
   }

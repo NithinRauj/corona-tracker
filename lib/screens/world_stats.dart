@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WorldStats extends StatefulWidget {
   @override
@@ -8,33 +9,40 @@ class WorldStats extends StatefulWidget {
 class _WorldStatsState extends State<WorldStats> {
   @override
   Widget build(BuildContext context) {
+    Map<String, int> totalStats = Provider.of<Map<String, int>>(context);
     return Container(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        StatsWidget(
-          title: 'CONFIRMED',
-          stats: 9999999,
-          statsColor: Colors.blue[300],
-        ),
-        SizedBox(
-          height: 5.0,
-        ),
-        StatsWidget(
-          title: 'DEAD',
-          stats: 9999999,
-          statsColor: Colors.redAccent,
-        ),
-        SizedBox(
-          height: 5.0,
-        ),
-        StatsWidget(
-          title: 'RECOVERED',
-          stats: 9999999,
-          statsColor: Colors.greenAccent,
-        ),
-      ],
-    ));
+        child: totalStats == null
+            ? Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.grey,
+                ),
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  StatsWidget(
+                    title: 'CONFIRMED',
+                    stats: totalStats != null ? totalStats['confirmed'] : 0,
+                    statsColor: Colors.blue[300],
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  StatsWidget(
+                    title: 'DEAD',
+                    stats: totalStats != null ? totalStats['dead'] : 0,
+                    statsColor: Colors.redAccent,
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                  ),
+                  StatsWidget(
+                    title: 'RECOVERED',
+                    stats: totalStats != null ? totalStats['recovered'] : 0,
+                    statsColor: Colors.greenAccent,
+                  ),
+                ],
+              ));
   }
 }
 
@@ -42,7 +50,7 @@ class StatsWidget extends StatelessWidget {
   const StatsWidget({this.title, this.stats, this.statsColor});
 
   final String title;
-  final double stats;
+  final int stats;
   final Color statsColor;
 
   @override
@@ -68,7 +76,7 @@ class StatsWidget extends StatelessWidget {
               ),
             ),
             Text(
-              stats.round().toString(),
+              stats.toString(),
               style: TextStyle(
                 fontFamily: 'Montserrat',
                 color: statsColor,
