@@ -31,9 +31,9 @@ class _ChartViewState extends State<ChartView> {
               padding: const EdgeInsets.only(top: 65.0),
               child: PieChart(
                 dataMap: sampleMap,
-                animationDuration: Duration(
-                  milliseconds: 1000,
-                ),
+                // animationDuration: Duration(
+                //   milliseconds: 1000,
+                // ),
                 legendPosition: LegendPosition.bottom,
                 chartRadius: 300.0,
                 chartLegendSpacing: 60,
