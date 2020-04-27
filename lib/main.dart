@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       home: DefaultTabController(
         length: 3,
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
                 ),
                 Tab(
                   child: Text(
-                    'Chart View',
+                    'Chart',
                     style: TextStyle(
                       fontFamily: 'Montserrat',
                       fontWeight: FontWeight.w300,

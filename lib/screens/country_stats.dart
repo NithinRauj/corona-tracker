@@ -1,7 +1,10 @@
+import 'package:corona_tracker_app/services/data_service.dart';
 import 'package:flutter/material.dart';
 
 String countryNameField;
 String countryName;
+String flagURL;
+String defaultFlagURL = 'https://corona.lmao.ninja/assets/img/flags/in.png';
 int confirmed;
 int dead;
 int recovered;
@@ -25,18 +28,18 @@ class _CountryStatsState extends State<CountryStats> {
     countryNameField = controller.text;
   }
 
-  void setCountryWiseStats(List<dynamic> stats) {
+  void setCountryWiseStats(Map<String, dynamic> stats) {
     print('called');
-    for (var stat in stats) {
-      if (stat['location'] == countryName) {
-        confirmed = stat['confirmed'];
-        dead = stat['dead'];
-        recovered = stat['recovered'];
+    if (stats['confirmed'] != -1) {
+      this.setState(() {
+        countryName = stats['country'];
+        confirmed = stats['confirmed'];
+        dead = stats['dead'];
+        recovered = stats['recovered'];
+        flagURL = stats['flag'];
         showCountryStats = true;
-        break;
-      }
-    }
-    if (!showCountryStats) {
+      });
+    } else {
       Scaffold.of(context).showSnackBar(SnackBar(
         backgroundColor: Color(0xff272F35),
         content: Text(
@@ -75,15 +78,14 @@ class _CountryStatsState extends State<CountryStats> {
               ),
             ),
             RaisedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (countryNameField != null && countryNameField != '') {
                   showCountryStats = false;
                   countryName = countryNameField.trim();
-                  // if (provider.getResponse() != null) {
-                  //   var data = provider.getResponse();
-                  //   setCountryWiseStats(data);
                   FocusScope.of(context).unfocus();
-                  // }
+                  var response =
+                      await DataService().getCountryStatsData(countryName);
+                  setCountryWiseStats(response);
                 }
               },
               color: Color(0xff272F35),
@@ -99,7 +101,7 @@ class _CountryStatsState extends State<CountryStats> {
                 ),
               ),
             ),
-            !showCountryStats
+            showCountryStats
                 ? Padding(
                     padding: const EdgeInsets.only(top: 50.0),
                     child: Container(
@@ -114,18 +116,29 @@ class _CountryStatsState extends State<CountryStats> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Center(
-                            child: Text(
-                              countryNameField != null
-                                  ? countryName
-                                  : '<Country Name>',
-                              style: TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 28.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              flagURL != null
+                                  ? Image.network(
+                                      flagURL,
+                                      width: 45.0,
+                                      height: 45.0,
+                                    )
+                                  : CircularProgressIndicator(),
+                              SizedBox(width: 10.0),
+                              Text(
+                                countryNameField != null
+                                    ? countryName
+                                    : '<Country Name>',
+                                style: TextStyle(
+                                  fontFamily: 'Montserrat',
+                                  fontSize: 28.0,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -188,9 +201,6 @@ class _CountryStatsState extends State<CountryStats> {
                       ),
                     ),
                   )
-                // : Scaffold.of(context).showSnackBar(SnackBar(
-                //     content: Text('Enter a valid Country'),
-                //   ))
                 : Container(
                     width: 310.0,
                     height: 230.0,
