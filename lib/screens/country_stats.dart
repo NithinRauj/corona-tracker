@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 String countryNameField;
 String countryName;
 String flagURL;
-String defaultFlagURL = 'https://corona.lmao.ninja/assets/img/flags/in.png';
 int confirmed;
 int dead;
 int recovered;

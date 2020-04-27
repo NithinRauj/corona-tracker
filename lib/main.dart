@@ -9,14 +9,13 @@ import 'package:provider/provider.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final service = DataService();
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Corona Tracker',
       home: DefaultTabController(
         length: 3,
         child: Scaffold(
@@ -61,12 +60,17 @@ class MyApp extends StatelessWidget {
               ]),
             ),
             body: FutureProvider(
-              create: (context) => service.getTotalStatsData(),
-              child: TabBarView(children: [
-                WorldStats(),
-                ChartView(),
-                CountryStats(),
-              ]),
+              create: (context) => DataService().getTotalStatsData(),
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).requestFocus(new FocusNode());
+                },
+                child: TabBarView(children: [
+                  WorldStats(),
+                  ChartView(),
+                  CountryStats(),
+                ]),
+              ),
             )),
       ),
     );

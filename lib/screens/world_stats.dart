@@ -10,39 +10,45 @@ class _WorldStatsState extends State<WorldStats> {
   @override
   Widget build(BuildContext context) {
     Map<String, int> totalStats = Provider.of<Map<String, int>>(context);
-    return Container(
-        child: totalStats == null
-            ? Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Colors.grey,
-                ),
-              )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  StatsWidget(
-                    title: 'CONFIRMED',
-                    stats: totalStats != null ? totalStats['confirmed'] : 0,
-                    statsColor: Colors.blue[300],
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  StatsWidget(
-                    title: 'DEAD',
-                    stats: totalStats != null ? totalStats['dead'] : 0,
-                    statsColor: Colors.redAccent,
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                  ),
-                  StatsWidget(
-                    title: 'RECOVERED',
-                    stats: totalStats != null ? totalStats['recovered'] : 0,
-                    statsColor: Colors.greenAccent,
-                  ),
-                ],
-              ));
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 50.0),
+        child: Container(
+            child: totalStats == null
+                ? Center(
+                    heightFactor: 10.0,
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.grey,
+                    ),
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      StatsWidget(
+                        title: 'CONFIRMED',
+                        stats: totalStats != null ? totalStats['confirmed'] : 0,
+                        statsColor: Colors.blue[300],
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      StatsWidget(
+                        title: 'DEAD',
+                        stats: totalStats != null ? totalStats['dead'] : 0,
+                        statsColor: Colors.redAccent,
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      StatsWidget(
+                        title: 'RECOVERED',
+                        stats: totalStats != null ? totalStats['recovered'] : 0,
+                        statsColor: Colors.greenAccent,
+                      ),
+                    ],
+                  )),
+      ),
+    );
   }
 }
 
